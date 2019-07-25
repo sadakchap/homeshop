@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block mystyles%}
+    <style>
+        span.asteriskField {
+            display: none;
+        }
+        .card{
+            box-shadow: 0 3px 20px rgba(0, 0, 0, .2);
+        }
+        .alert.alert-block.alert-danger ul{
+            margin: 0;
+            padding: 0;
+        }
+        .alert.alert-block.alert-danger ul li {
+            list-style: none;
+            font-size: .89em;
+        }
+    </style>
+{% endblock %}
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-6">
+                <form method="post" class="card pb-3 pt-5 pl-5 pr-5">
+                    <fieldset>
+                        <legend class="border-bottom pb-3 text-center" style="font-size: 3rem;">Login Here.</legend>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </fieldset>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-lg m-0 mt-3 btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
