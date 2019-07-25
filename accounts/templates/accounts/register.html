@@ -3,7 +3,19 @@
 {% block mystyles%}
 <style>
     span.asteriskField {
-        display: none;
+            display: none;
+    }
+    .card{
+        box-shadow: 0 3px 20px rgba(0, 0, 0, .2);
+        border-radius: 10px;
+    }
+    .alert.alert-block.alert-danger ul{
+        margin: 0;
+        padding: 0;
+    }
+    .alert.alert-block.alert-danger ul li {
+        list-style: none;
+        font-size: .89em;
     }
 </style>
 {% endblock %}
@@ -12,15 +24,15 @@
 <div class="container mt-5">
     <div class="row justify-content-center align-items-center">
         <div class="col-lg-6">
-            <form method="post" class="card p-5 pb-3">
+            <form method="post" class="card pt-5 pr-5 pl-5 pb-4">
                 <fieldset>
-                    <legend class="border-bottom pb-2 text-center" style="font-size: 2rem;">Sign up here.</legend>
+                    <legend class="border-bottom pb-2 text-center" style="font-size: 3rem;">Sign up here.</legend>
                     {% csrf_token %}
                     {{ form|crispy }}
                 </fieldset>
                 <input type="hidden" name="next" value="{{ next }}">
                 <div class="form-group text-center mt-3 m-0">
-                    <button type="submit" class="btn btn-primary">Signup</button>
+                    <button type="submit" class="btn btn-lg btn-primary">Signup</button>
                 </div>
             </form>
         </div>

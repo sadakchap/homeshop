@@ -81,16 +81,22 @@ class User(AbstractBaseUser):
 
 
 
-# class UserProfile(models.Model):
-#     user            = models.OneToOneField(User, on_delete=models.CASCADE)
-#     confirm_email   = models.BooleanField(default=False)
-#     confirmed_date  = models.DateTimeField()
-#     profile_pic     = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
+class UserProfile(models.Model):
+    GENDER_CHOICE = (
+        ('m', "Male"),
+        ('f', "Female"),
+        ('o', "Other"),
+    )
+    user            = models.OneToOneField(User, on_delete=models.CASCADE)
+    confirm_email   = models.BooleanField(default=False)
+    confirmed_date  = models.DateTimeField(blank=True, null=True)
+    profile_pic     = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
+    gender          = models.CharField(max_length=1, choices=GENDER_CHOICE)
 
-#     def __str__(self):
-#         return self.user.email
+    def __str__(self):
+        return self.user.email
     
-#     def set_confirmed_date(self):
-#         self.confirmed_date = timezone.now()
-#         self.save()
+    def set_confirmed_date(self):
+        self.confirmed_date = timezone.now()
+        self.save()
     
