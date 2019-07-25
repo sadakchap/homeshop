@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile
+from .models import Profile
 # from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth import get_user_model
@@ -30,7 +30,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
     
 
-@admin.register(UserProfile)
+@admin.register(Profile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'confirm_email', 'confirmed_date', 'gender',]
     list_filter = ['confirm_email', 'gender']

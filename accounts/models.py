@@ -81,7 +81,7 @@ class User(AbstractBaseUser):
 
 
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     GENDER_CHOICE = (
         ('m', "Male"),
         ('f', "Female"),
@@ -91,7 +91,7 @@ class UserProfile(models.Model):
     confirm_email   = models.BooleanField(default=False)
     confirmed_date  = models.DateTimeField(blank=True, null=True)
     profile_pic     = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
-    gender          = models.CharField(max_length=1, choices=GENDER_CHOICE)
+    gender          = models.CharField(max_length=1, choices=GENDER_CHOICE, blank=True)
 
     def __str__(self):
         return self.user.email

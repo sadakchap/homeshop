@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from .models import Profile
 
 User = get_user_model()
 
@@ -80,3 +81,13 @@ class UserRegisterForm(forms.ModelForm):
         if pwrd1 and pwrd2 and pwrd1!=pwrd2:
             raise forms.ValidationError("Passwords don't match!")
         return pwrd2
+
+class UserChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name',)
+
+class UserProfileChangeForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('profile_pic','gender',)
