@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
+from django.core.mail import send_mail
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -66,6 +67,10 @@ class User(AbstractBaseUser):
     
     def has_module_perms(self, app_label):
         return True
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """Send an email to this user."""
+        send_mail(subject, message, from_email, [self.email], **kwargs)
     
     @property
     def is_staff(self):
@@ -78,8 +83,6 @@ class User(AbstractBaseUser):
     @property
     def is_active(self):
         return self.active
-
-
 
 class Profile(models.Model):
     GENDER_CHOICE = (

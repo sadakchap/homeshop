@@ -61,6 +61,7 @@ class UserLoginForm(forms.Form):
             return super(UserLoginForm, self).clean(*args, **kwargs)
 
 class UserRegisterForm(forms.ModelForm):
+    email     = forms.EmailField(help_text='Required. Inform a valid email address')
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password Confirm', widget=forms.PasswordInput)
 
