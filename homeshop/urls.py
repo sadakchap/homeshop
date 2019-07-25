@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path
 from accounts.views import (
     login_view, logout_view, register, 
-    home, account_activation_sent, activate
+    home, account_activation_sent, activate, complete_registration
 )
 
 urlpatterns = [
@@ -14,6 +14,7 @@ urlpatterns = [
     path('register/',register, name='register'),
     path('account-activation-sent/', account_activation_sent, name='account_activation_sent'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
+    path('complete-rgisteration/', complete_registration, name='complete_registration'),
     path('', home, name='home'),
 ]
 if settings.DEBUG:

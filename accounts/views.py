@@ -8,7 +8,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.utils.http import is_safe_url
 from django.contrib import messages
-from .forms import UserLoginForm, UserRegisterForm
+from django.contrib.auth.decorators import login_required
+from .forms import UserLoginForm, UserRegisterForm, UserChangeForm, UserProfileChangeForm
 
 from django.utils.encoding import force_text
 from django.contrib.auth import get_user_model
@@ -35,6 +36,7 @@ def login_view(request):
             return redirect("/")
     return render(request, "accounts/login.html", {'form': form})
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('/')
@@ -91,6 +93,17 @@ def activate(request, uidb64, token):
         user.save()
         login(request, user)
         messages.success(request, "Your account has been activated!")
-        return redirect('home')
+        return redirect('complete_registration')
     else:
         return render(request, 'account_activation_invalid.html')
+
+@login_required
+def complete_registration(request):
+    user = request.user
+    u_form = UserChangeForm(request.POST or None, instance=user)
+    p_form = UserProfileChangeForm(request.POST or None, request.FILES or None, instance=user.profile)
+    if u_form.is_valid() and p_form.is_valid():
+        u_form.save()
+        p_form.save()
+        return redirect('/')
+    return render(request, 'accounts/complete_registration.html', {'u_form':u_form, 'p_form': p_form})
