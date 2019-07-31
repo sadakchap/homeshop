@@ -18,6 +18,7 @@
         font-size: .89em;
     }
 </style>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}
 {% block title %}Register{% endblock %}
 {% block content %}
@@ -31,8 +32,14 @@
                     {{ form|crispy }}
                 </fieldset>
                 <input type="hidden" name="next" value="{{ next }}">
+                <div class="form-group d-flex justify-content-center align-items-center ">
+                    <div class="g-recaptcha" data-sitekey="6LeSPLAUAAAAAJGdj1Olii9PX1UkPQO9iIm1CIhb"></div>
+                </div>
                 <div class="form-group text-center mt-3 m-0">
                     <button type="submit" class="btn btn-lg btn-primary">Signup</button>
+                </div>
+                <div class="row mt-5">
+                    <p><a href="{% url 'login' %}" class="">Already Have an Account?</a></p>
                 </div>
             </form>
         </div>

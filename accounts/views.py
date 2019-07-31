@@ -14,6 +14,11 @@ from .forms import UserLoginForm, UserRegisterForm, UserChangeForm, UserProfileC
 from django.utils.encoding import force_text
 from django.contrib.auth import get_user_model
 
+from django.conf import settings
+import requests
+
+from accounts.decorators import check_recaptcha
+
 User = get_user_model()
 
 # Create your views here.
@@ -25,15 +30,33 @@ def login_view(request):
     next_post = request.POST.get('next')
     redirect_path = next_ or next_post or None
     if form.is_valid():
-        email = form.cleaned_data.get('email')
-        password = form.cleaned_data.get('password')
-        user = authenticate(username=email, password=password)
-        if user:
-            messages.success(request, f"You are Logged in as {email}")
-            login(request, user)
-            if is_safe_url(redirect_path, request.get_host()):
-                return redirect(redirect_path)
-            return redirect("/")
+        '''Begin recaptcha validation'''
+        
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+
+        ''' End recaptcha validation '''
+        
+        if result['success']:
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=email, password=password)
+            if user:
+                login(request, user)
+                messages.success(request, f"You are Logged in as {email}")
+                # messages.success(request, 'recaptcha vaildated!!!')
+                if is_safe_url(redirect_path, request.get_host()):
+                    return redirect(redirect_path)
+                return redirect("/")
+        else:
+            messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+
+
     return render(request, "accounts/login.html", {'form': form})
 
 @login_required
@@ -41,12 +64,13 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+@check_recaptcha
 def register(request):
     form = UserRegisterForm(request.POST or None)
     # next_ = request.GET.get('next')
     # next_post = request.POST.get('next')
     # redirect_path = next_ or next_post or None
-    if form.is_valid():
+    if form.is_valid() and request.recaptcha_is_valid:
         # email  = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password2')
         user = form.save(commit=False)
