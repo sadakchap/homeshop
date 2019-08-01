@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block mystyles %}
+    <style>
+        .img-box img{
+            box-shadow: 0 5px 20px rgba(0,0,0,.2);
+        }
+    
+    </style>
+{% endblock %}
+{% block title %}{{ product.title|title }}{% endblock %}
+{% block content %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="img-box">
+                    <img src="{% if product.image %}{{ product.image.url }}{% endif %}" alt="">
+                </div>
+            </div>
+            <div class="col-lg-9 mt-5">
+                <h5 class="text-success font-weight-light">
+                    {{ product.title|title}}
+                </h5>
+                <p class="font-weight-bold">
+                    $ <span class="price">{{ product.price }}</span>
+                </p>
+                {% with c=product.category %}
+                    <a href="{{ c.get_absolute_url }}" class="badge badge-info">{{ c.title|title }}</a>
+                {% endwith %}
+                <p><small>
+                    {{product.desc|linebreaks}}
+                </small></p>
+
+                <p>
+                    <a href="" class="btn btn-warning">
+                        Add to Cart
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

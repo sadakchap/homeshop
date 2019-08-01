@@ -1,11 +1,73 @@
 {% extends "base.html" %}
-{% block title %}Welcome|Home{% endblock %}
+{% block mystyles %}
+    <style>
+        .img-box{
+            width: 100%;
+            padding:10px;
+            margin: 0;
+            height: 260px;
+        }
+        .img-box img{
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 0px rgba(0,0,0,.2);
+        }
+        .card{
+            box-shadow: 0 10px 30px rgba(0,0,0,.2) !important;
+            margin: 0 1em !important;
+            transition: .5s;
+        }
+        .card:hover{
+            box-shadow: none !important;
+            border: 1px solid #13a1e487;
+        }
+    </style>
+{% endblock %}
+{% block title %}Welcome | Home{% endblock %}
 {% block content %}
-    <div class="jumbotron jumbotron-fluid m-0" style="min-height: 90vh;">
+    <div class="jumbotron jumbotron-fluid m-0" style="min-height: 60vh;">
         <div class="container align-items-center justify-content-center">
             <h2 class="display-4">Welcome to ECart</h2>
             <p class="lead">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque quibusdam debitis tempora saepe, consequuntur ad quas deleniti, eveniet neque, nostrum culpa dolor commodi. Ipsa, eos? Temporibus facere similique ad deleniti?</p>
             <hr class="myhr">
+        </div>
+    </div>
+    <div class="container my-5">
+        <ul class="nav nav-tabs my-2">
+            <li class="nav-item">
+                <a class="nav-link {% if not cateogry %}active{% endif %}" href="{% url 'products:list' %}">All</a>
+            </li>
+            {% for cat in categories %}
+                <li class="nav-item">
+                    <a 
+                        class="nav-link {% if cat.slug == category.slug %}active{% endif %}" 
+                        href="{{ cat.get_absolute_url }}">
+                        {{ cat.title|title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="row my-5">
+            {% for obj in products %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="card">
+                        <div class="img-box">
+                            <img src="{% if obj.image %}{{ obj.image.url }}{% endif %}" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{{ obj.get_absolute_url }}"> {{ obj.title|title }}</a></h5>
+                            <p><small class="font-weight-bold">${{ obj.price }}</small></p>
+                            <a href="#" class="btn btn-warning">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+            <div class="text-center" style="width: 100%;">
+                <h5 class="display-4">No Products added Yet!!</h5>
+            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
