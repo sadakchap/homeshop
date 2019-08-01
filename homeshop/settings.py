@@ -21,6 +21,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
+    'products.apps.ProductsConfig',
     
     'django.contrib.admin',
     'django.contrib.auth',
