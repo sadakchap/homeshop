@@ -22,6 +22,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'products.apps.ProductsConfig',
+    'cart.apps.CartConfig',
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -131,3 +132,7 @@ STATIC_ROOT = os.path.join(VENV_PATH, "static_root")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+
+CART_SESSION_ID = 'cart'

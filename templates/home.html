@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block mystyles %}
     <style>
         .img-box{
@@ -54,7 +55,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="card">
                         <div class="img-box">
-                            <img src="{% if obj.image %}{{ obj.image.url }}{% endif %}" class="img-fluid">
+                            <img src="{% if obj.image %}{{ obj.image.url }}{% else %}{% static 'img/no_img.jpeg'%}{% endif %}" class="img-fluid">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title"><a href="{{ obj.get_absolute_url }}"> {{ obj.title|title }}</a></h5>
