@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block mystyles %}
+    <style>
+        select#id_quantity{
+            border-radius: 4px;
+            padding: .15em;
+            margin-right: .5em;
+        }
+        button{
+            background: transparent !important;
+            border: none !important;
+            outline: none !important ;
+            box-shadow: none !important;
+        }
+    </style>
+{% endblock %}
+{% block title %} Cart Details {% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="display-4 mb-5">Your Shopping Cart</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Remove</th>
+                    <th>Unit Price</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                {% with product=item.product %}
+                    <tr>
+                        <td class="product-img">
+                            <a href="{{ product.get_absolute_url }}">
+                                <img width="100px" height="100px"
+                                    src="{% if product.image %}
+                                            {{ product.image.url }}
+                                        {% else %}
+                                            {% static 'img/no_img.jpeg' %}
+                                        {% endif %}" 
+                                    title="{{ product.title|title }}"
+                                >
+                            </a>
+                        </td>
+                        <td>
+                            <div>
+                                <a href="{{ product.get_absolute_url }}" class="font-weight-bold text-info">{{ product.title|title }}</a>
+                                <p><small class="text-muted">Quantity : {{ item.quantity}}</small></p>
+                            </div>
+                        </td>
+                        <td>
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                {{ item.update_quantity_form.quantity }}
+                                {{ item.update_quantity_form.update }}
+                                {% csrf_token %}
+                                <button type="submit" class="font-weight-bold text-success">Update</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="{% url 'cart:cart_remove' product.id %}" class="text-danger font-weight-bold">
+                                Remove <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                        <td>${{item.price}}</td>
+                        <td>${{ item.total_price }}</td>
+                    </tr>
+                {% endwith %}
+                {% empty %}
+                    <tr>
+                        <td colspan='5'>No items in Cart</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="5" class="text-right">SubTotal: </td>
+                    <td>${{ cart.get_total_price }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <div class="float-right">
+            <a href="{% url 'products:list' %}" class="btn btn-warning">Continue Shopping <i class="fas fa-shopping-cart"></i></a>
+            <a href="" class="btn btn-success">CheckOut</a>
+        </div>
+    </div>
+{% endblock %}

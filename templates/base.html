@@ -8,6 +8,21 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>{% block title %} Base {% endblock %}</title>
     {% block mystyles %}{% endblock %}
+    <script src="https://kit.fontawesome.com/8c5d16754b.js"></script>
+    <style>
+        button:focus,
+        a:focus{
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        a,
+        a:focus,
+        a:hover,
+        a:active
+        {
+            text-decoration: none !important;
+        }
+    </style>
 </head>
 <body>
     

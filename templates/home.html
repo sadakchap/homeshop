@@ -16,13 +16,20 @@
             box-shadow: 0 0 5px 0px rgba(0,0,0,.2);
         }
         .card{
-            box-shadow: 0 10px 30px rgba(0,0,0,.2) !important;
-            margin: 0 1em !important;
+            box-shadow: 0 15px 20px rgba(0,0,0,.2) !important;
+            margin-top: 1em !important;
             transition: .5s;
         }
         .card:hover{
             box-shadow: none !important;
             border: 1px solid #13a1e487;
+        }
+        a{
+            outline: none !important;
+        }
+        a.badge-info:focus {
+            outline: 0;
+            box-shadow: none !important;
         }
     </style>
 {% endblock %}
@@ -52,15 +59,23 @@
         </ul>
         <div class="row my-5">
             {% for obj in products %}
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="card">
                         <div class="img-box">
-                            <img src="{% if obj.image %}{{ obj.image.url }}{% else %}{% static 'img/no_img.jpeg'%}{% endif %}" class="img-fluid">
+                            <a href="{{ obj.get_absolute_url }}">
+                                <img src="{% if obj.image %}{{ obj.image.url }}{% else %}{% static 'img/no_img.jpeg'%}{% endif %}" class="img-fluid">
+                            </a>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title"><a href="{{ obj.get_absolute_url }}"> {{ obj.title|title }}</a></h5>
-                            <p><small class="font-weight-bold">${{ obj.price }}</small></p>
-                            <a href="#" class="btn btn-warning">Add to Cart</a>
+                            <h5 class="card-title" style="font-size: 1rem;">
+                                <a href="{{ obj.get_absolute_url }}" class="font-weight-bold text-success btn p-0"> {{ obj.title|title }}</a>
+                            </h5>
+                            <p class="d-flex justify-content-between align-items-center">
+                                <small class="font-weight-bold">${{ obj.price }}</small>
+                                {% with c=obj.category %}
+                                    <a href="{{ c.get_absolute_url }}" class="badge badge-danger">{{ c.title|title }}</a>
+                                {% endwith %}
+                            </p>
                         </div>
                     </div>
                 </div>

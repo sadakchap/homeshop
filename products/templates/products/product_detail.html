@@ -1,24 +1,62 @@
 {% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% block mystyles %}
     <style>
         .img-box img{
             box-shadow: 0 5px 20px rgba(0,0,0,.2);
+            width: 100%;
+            border-radius: 10px;
+            transition: .8s;
+            /* height: 100%; */
+        }
+        .img-box img:hover{
+            box-shadow: none !important;
+            border: 1px solid #2d6df5a1;
+        }
+        span.asteriskField{
+            display: none;
+        }
+        div#div_id_quantity{
+            display: inline-flex !important;
+            margin: 0 2em 0 0 !important;
+        }
+        label.col-form-label
+        {
+            margin-right: .5em !important;
+        }
+        a.badge-info:focus {
+            outline: 0;
+            box-shadow: none !important;
+        }
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0px .05rem rgba(0,123,255,.25);
         }
     
     </style>
 {% endblock %}
-{% block title %}{{ product.title|title }}{% endblock %}
+{% block title %}{{ product.title|title }} | HomeShop{% endblock %}
 {% block content %}
     <div class="container my-5">
         <div class="row">
             <div class="col-lg-3">
                 <div class="img-box">
-                    <img src="{% if product.image %}{{ product.image.url }}{% endif %}" alt="">
+                    <a href="{{ product.get_absolute_url }}">
+                        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_img.jpeg' %}{% endif %}" alt="">
+                    </a>
                 </div>
             </div>
-            <div class="col-lg-9 mt-5">
+            <div class="col-lg-9 mt-3">
                 <h5 class="text-success font-weight-light">
-                    {{ product.title|title}}
+                    <a href="{{ product.get_absolute_url }}" 
+                        style="text-decoration: none;" 
+                        class="text-success font-weight-bold">
+                        {{ product.title|title}}
+                    </a>
                 </h5>
                 <p class="font-weight-bold">
                     $ <span class="price">{{ product.price }}</span>
@@ -26,14 +64,16 @@
                 {% with c=product.category %}
                     <a href="{{ c.get_absolute_url }}" class="badge badge-info">{{ c.title|title }}</a>
                 {% endwith %}
-                <p><small>
+                <div class="product-desc my-3 text-secondary">
                     {{product.desc|linebreaks}}
-                </small></p>
+                </div>
 
                 <p>
-                    <a href="" class="btn btn-warning">
-                        Add to Cart
-                    </a>
+                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                        {{ form|crispy }}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-info">Add to Cart</button>
+                    </form>
                 </p>
             </div>
         </div>
