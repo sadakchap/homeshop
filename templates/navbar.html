@@ -1,3 +1,4 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="box-shadow: 0 10px 20px rgba(0,0,0,.2);">
     <div class="container">
         <a class="navbar-brand" href="/">Navbar</a>
@@ -9,10 +10,43 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-lg-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">About</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Products</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Cart <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="navbarDropdown">
+                        {% with total_items=cart|length %}
+                            {% if cart|length > 0 %}
+                                {% for item in cart %}
+                                    <a class="dropdown-item" href="#">
+                                        <div class="cart-item">
+                                            {% with prod=item.product %}
+                                            <div class="item-img">
+                                                <img src="{% if prod.image %}{{ prod.image.url }}{% else %}{% static 'img/no_img.jpeg' %}{% endif %}" alt="">
+                                            </div>
+                                            <div class="item-title">
+                                                <h4>{{ prod.title|title }}</h4>
+                                            </div>
+                                            <div class="item-price">
+                                                <small>${{ item.price }}</small>
+                                            </div>
+                                            {% endwith %}
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                {% endfor %}
+                                    <div class="d-flex px-2 justofy-content-between align-items-center" href="#">
+                                        <a href="#" class="btn">Subtotal: ${{ cart.get_total_price }}</a>
+                                        <a href="{% url 'cart:cart_detail' %}" class="btn btn-sm btn-warning">Go to Cart</a>
+                                    </div>
+                            {% else %}
+                                <a class="dropdown-item" href="#">No items Here.</a>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
