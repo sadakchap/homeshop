@@ -32,8 +32,8 @@ class Address(models.Model):
     addr_line_1 = models.CharField(max_length=120)
     addr_line_2 = models.CharField(max_length=120, null=True, blank=True)
     city        = models.CharField(max_length=120)
-    country     = models.CharField(max_length=120, default='India')
     state       = models.CharField(max_length=120)
+    country     = models.CharField(max_length=120, default='India')
     postal_code = models.CharField(max_length=120)
 
     def __str__(self):

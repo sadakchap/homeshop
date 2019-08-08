@@ -54,6 +54,8 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
+        if self.first_name:
+            return self.first_name
         return self.email  
     
     def get_full_name(self):

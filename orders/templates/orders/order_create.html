@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} HomeShop | CheckOut {% endblock %}
+{% block content %}
+    <div class="jumbotron fluid-jumbotron">
+        <div class="container">
+            <h2 class="display-4">CheckOut</h2>
+
+            <div class="row">
+                <div class="col-lg-9">
+                    <form method="post">
+                        <fieldset class="">
+                            <legend class="border-bottom pb-3">Shipping Address</legend>
+                            {{ addr_form|crispy }}
+                        </fieldset>
+                        {% csrf_token %}
+                        <button type="submit">CheckOut</button>
+                    </form>
+                </div>
+                <div class="col-lg-3">
+                    <ul>
+                        <li>Your Orders:</li>
+                        {% for item in cart %}
+                            <li>{{item.quantity}}x {{item.product.title}} <span>${{item.total_price}}</span></li>
+                        {% endfor %}
+                        <li>Subtotal: <span>${{cart.get_total_price}}</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}

@@ -15,7 +15,9 @@ urlpatterns = [
     path('account-activation-sent/', account_activation_sent, name='account_activation_sent'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('complete-rgisteration/', complete_registration, name='complete_registration'),
+
     path('cart/', include('cart.urls')),
+    path('orders/', include('orders.urls')),
     path('',include('products.urls')),
 ]
 if settings.DEBUG:

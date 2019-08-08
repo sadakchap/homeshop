@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %} HomeShop | Order Placed {% endblock %}
+{% block content %}
+    <div class="jumbotron fluid-jumbotron">
+        <div class="container">
+            <h2>Order Placed Successfully!</h2>
+            <p>Your order has been placed successfully. Your order number is <strong>{{ order.id }}</strong></p>
+        </div>
+    </div>
+{% endblock %}
