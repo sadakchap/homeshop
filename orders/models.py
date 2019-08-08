@@ -6,22 +6,9 @@ from products.models import Product
 
 User = get_user_model()
 
-class Address(models.Model):
-    user    = models.ForeignKey(User, on_delete=models.CASCADE, related_name='my_addrs')
-    line_1  = models.CharField(max_length=255)
-    line_2  = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=10)
-    city    = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f'{self.city} Zip Code {self.postal_code}'
-
-
 
 class Order(models.Model):
     user    = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    # items   = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name='order_item')
-    
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid    = models.BooleanField(default=False)
@@ -35,9 +22,37 @@ class Order(models.Model):
     def get_total_cost(self):
         return sum(i.get_cost() for i in self.items.all())
 
+    def get_shipping_addr(self):
+        return self.shipping_addr
+
+class Address(models.Model):
+    order       = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='shipping_addr')
+    name        = models.CharField(max_length=100, null=True, blank=True, help_text='Shipping to? Who is it?')
+    nickname    = models.CharField(max_length=100, null=True, blank=True, help_text='Internal Reference Nickname')
+    addr_line_1 = models.CharField(max_length=120)
+    addr_line_2 = models.CharField(max_length=120, null=True, blank=True)
+    city        = models.CharField(max_length=120)
+    country     = models.CharField(max_length=120, default='India')
+    state       = models.CharField(max_length=120)
+    postal_code = models.CharField(max_length=120)
+
+    def __str__(self):
+        if self.nickname:
+            return str(self.nickname)
+        return str(self.name)
+
+    def get_short_address(self):
+        name = self.name
+        if self.nickname:
+            name = f'{self.nickname} | {name}'
+        return f'{name} {self.addr_line_1}, {self.city}'
+
+    def get_address(self):
+        return f'{self.name or " "} \n {self.addr_line_1}\n {self.addr_line_2}\n {self.city}, {self.state}\n {self.postal_code}, {self.country} '
+
 class OrderItem(models.Model):
     order       = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    products    = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
+    product    = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
     price       = models.DecimalField(max_digits=10, decimal_places=2)
     quantity    = models.PositiveIntegerField(default=1)
 
